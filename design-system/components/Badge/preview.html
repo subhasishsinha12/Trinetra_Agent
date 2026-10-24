@@ -1,0 +1,12 @@
+<!-- @dsCard group="Feedback" height=90 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Badge — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-row'},h(T.Badge,{tone:'pass'},'Pass'),h(T.Badge,{tone:'warn'},'Data gap'),h(T.Badge,{tone:'fail'},'Fail'),h(T.Badge,{tone:'brand',mono:true},'OR-YES'),h(T.Badge,{mono:true},'ruleset 2.0.0-proto'),h(T.Badge,{tone:'discern'},'Awaiting approver')));
+</script>
+</body>
+</html>

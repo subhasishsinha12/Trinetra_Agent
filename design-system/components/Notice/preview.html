@@ -1,0 +1,12 @@
+<!-- @dsCard group="Feedback" height=150 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Notice — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-stack'},h(T.Notice,null,'Corrections create a new version. Nothing is edited in place.'),h(T.Notice,{tone:'warn',title:'Replace with board-approved values.'},'Collection threshold and escalation matrix are illustrative.'),h(T.Notice,{tone:'fail',title:'Injection screen hit.'},'Narrative contains instruction-like text; classified on structured fields only.')));
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Trinetra — cover</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--paper); padding: 0; position: relative; overflow: hidden; }
+  svg { position: absolute; left: 0; top: 0; }
+  .brand { fill: var(--brand); } .measure { fill: var(--eye-measure); } .discern { fill: var(--eye-discern); }
+  .ink { fill: var(--ink); } .tint { fill: var(--brand-soft); } .cut { fill: var(--paper); }
+  .blk { rx: var(--radius-lg); }
+  .rule { stroke: var(--ink); stroke-width: var(--border-rule); }
+  .name { position: absolute; left: 48px; bottom: 48px; max-width: 400px; }
+  .name h1 { margin: 0; font-family: var(--font-serif); font-weight: 600; font-size: 96px; line-height: .92; letter-spacing: -0.01em; color: var(--ink); }
+  .name p { margin: 16px 0 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+</style></head>
+<body>
+<!--
+  blocks: brand 192x192, eye-measure 128x128, eye-discern 152x240 (bleeds right), ink 128x104, brand-soft 192x88 (bleeds bottom); corners radius-lg
+  arrangement: modular grid right of x=480 with space-2 (8px) gutters, blocks bleeding off the top, right and bottom edges
+  pattern: literal motif, the three eyes; one cut-out lens (paper disc) with a pupil in each eye's block, because the README says each eye owns one colour and one numeral
+  scales: space-2 gutters, space-8 (64) and multiples for block sides, radius-lg, radius-full discs, border-rule top rule
+-->
+<svg width="960" height="288" viewBox="0 0 960 288" aria-hidden="true">
+  <line class="rule" x1="0" y1="1" x2="960" y2="1"/>
+  <rect class="brand blk" x="480" y="-8" width="192" height="200"/>
+  <rect class="tint blk" x="480" y="200" width="192" height="96"/>
+  <rect class="measure blk" x="680" y="-8" width="128" height="136"/>
+  <rect class="ink blk" x="680" y="136" width="128" height="104"/>
+  <rect class="discern blk" x="816" y="-8" width="152" height="248"/>
+  <circle class="cut" cx="576" cy="96" r="56"/><circle class="brand" cx="576" cy="96" r="24"/>
+  <circle class="cut" cx="744" cy="60" r="36"/><circle class="measure" cx="744" cy="60" r="16"/>
+  <circle class="cut" cx="888" cy="116" r="44"/><circle class="discern" cx="888" cy="116" r="20"/>
+</svg>
+<div class="name">
+  <h1>Trinetra</h1>
+  <p>Interface language for cited, human-gated risk engines.</p>
+</div>
+</body>
+</html>

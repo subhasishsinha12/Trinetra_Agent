@@ -1,0 +1,12 @@
+<!-- @dsCard group="Actions" height=72 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Button — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-row'},h(T.Button,{variant:'primary'},'Approve classification'),h(T.Button,{variant:'danger',disabled:true},'Override'),h(T.Button,null,'Load a sample'),h(T.Button,{variant:'quiet'},'Clear form')));
+</script>
+</body>
+</html>

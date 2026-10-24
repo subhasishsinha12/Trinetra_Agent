@@ -1,0 +1,12 @@
+<!-- @dsCard group="Forms" height=96 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Input — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-grid'},h(T.Field,{label:'Customer compensation, ₹'},h(T.Input,{prefix:'₹',inputMode:'numeric',defaultValue:'1,25,000'})),h(T.Field,{label:'Branch / unit'},h(T.Input,{placeholder:'e.g. Retail Ops, Pune'}))));
+</script>
+</body>
+</html>

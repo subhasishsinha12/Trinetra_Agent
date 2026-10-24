@@ -1,0 +1,15 @@
+<!-- @dsCard group="Layout" height=260 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>EyeCard — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'var(--space-4)'}},
+h(T.EyeCard,{eye:1,title:'Intake and classification',steps:['Schema check, data-gap flags','Narrative treated as data, injection screen','OR-YES / NO / HYBRID, credit boundary','Basel L1 primary + causal channel tag']}),
+h(T.EyeCard,{eye:2,title:'Quantification and capital',steps:['Gross loss, asset Cases A/B/C (para 39 expl.)','Net of realised recoveries only (para 31)','Table 8 BI mapping, provision-year rule (para 29)','Loss-year by accounting date, LC and ILM delta']}),
+h(T.EyeCard,{eye:3,title:'Escalation and human gate',steps:['Weighted DQ score, banded materiality','Repeat, root cause, control recommendations','Escalation routing, matrix gaps flagged','Approve or override, append-only audit']})));
+</script>
+</body>
+</html>

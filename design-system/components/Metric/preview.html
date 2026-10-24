@@ -1,0 +1,12 @@
+<!-- @dsCard group="Verdict" height=120 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Metric — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:'var(--space-3)'}},h(T.Metric,{label:'Gross loss',value:'₹ 4,82,500',cite:'para 39 expl.'}),h(T.Metric,{label:'Net loss',value:'₹ 4,42,500',delta:'− ₹ 40,000 realised',cite:'para 31'}),h(T.Metric,{label:'ILM delta',value:'+0.0004',delta:'! Below 10-yr history',deltaTone:'warn',cite:'Table 8'})));
+</script>
+</body>
+</html>

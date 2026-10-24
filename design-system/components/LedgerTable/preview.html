@@ -1,0 +1,12 @@
+<!-- @dsCard group="Data" height=200 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>LedgerTable — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-stack'},h(T.LedgerTable,{columns:[{key:'v',label:'Ver'},{key:'ts',label:'Timestamp (IST)'},{key:'ev',label:'Event',mono:true},{key:'hash',label:'Input hash',mono:true},{key:'out',label:'Engine output'},{key:'conf',label:'Conf.',align:'end'},{key:'dec',label:'Human decision'},{key:'fin',label:'Final classification'}],rows:[{v:'1',ts:'24 Oct 2026, 11:42',ev:'ORE-2026-0417',hash:'9f3c…a1e0',out:'OR-HYBRID · EDPM',conf:'0.82',dec:h(T.Badge,{tone:'pass'},'Approved'),fin:'EDPM'}]}),h(T.LedgerTable,{columns:[{key:'v',label:'Ver'},{key:'ts',label:'Timestamp (IST)'},{key:'ev',label:'Event'},{key:'dec',label:'Human decision'}],empty:'No decisions yet. Record a decision at the human gate to create version 1.'})));
+</script>
+</body>
+</html>

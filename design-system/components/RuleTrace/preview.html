@@ -1,0 +1,12 @@
+<!-- @dsCard group="Verdict" height=220 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>RuleTrace — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(T.RuleTrace,{rules:[{id:'R01',title:'Schema check',detail:'All mandatory fields present',result:'pass'},{id:'R03',title:'Credit boundary',detail:'Credit-linked loss flagged: OR-HYBRID',cite:'para 18',result:'warn',label:'Hybrid'},{id:'R07',title:'Net of realised recoveries',detail:'Expected recoveries excluded',cite:'para 31',result:'pass'},{id:'R12',title:'Escalation matrix',detail:'No matrix supplied for amounts over ₹ 10 L',result:'fail'}]}));
+</script>
+</body>
+</html>

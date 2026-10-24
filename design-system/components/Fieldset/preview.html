@@ -1,0 +1,12 @@
+<!-- @dsCard group="Forms" height=240 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Fieldset — preview</title></head>
+<body>
+<div id="root" class="tr-root"></div>
+<script>
+  var T = window.Trinetra, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h('div',{className:'tr-stack'},h(T.Fieldset,{legend:'Recoveries, ₹'},h(T.Field,{label:'Insurance received'},h(T.Input,{prefix:'₹',defaultValue:'40,000'})),h(T.Field,{label:'Expected, not yet received',hint:'Excluded from net loss (para 31)'},h(T.Input,{prefix:'₹',defaultValue:'15,000'}))),h(T.Fieldset,{legend:'Evidence checklist (drives DQ score)',layout:'checks'},h(T.Checkbox,{label:'Gross loss supported',defaultChecked:true}),h(T.Checkbox,{label:'Recovery supported'}),h(T.Checkbox,{label:'Duplicate check done',defaultChecked:true}))));
+</script>
+</body>
+</html>
