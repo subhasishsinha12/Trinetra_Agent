@@ -1,0 +1,335 @@
+<title>TRINETRA-RISK Architecture</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Layout: a single reading column of four figures (mind map, target architecture, lifecycle, prototype map), each a titled surface panel with its claim in the caption. Tokens are the Trinetra design system. */
+:root {
+  --paper: #f6f4ee; --surface: #ffffff; --surface-sunken: #efece4; --line: #d6d1c4; --line-strong: #8a8475;
+  --ink: #1a1d21; --ink-muted: #575d65;
+  --brand: #0d5c61; --brand-soft: #ddeceb;
+  --eye-perceive: #0d5c61; --eye-perceive-soft: #ddeceb;
+  --eye-measure: #845300; --eye-measure-soft: #f4ead5;
+  --eye-discern: #8e2c3a; --eye-discern-soft: #f5e2e4;
+  --pass: #1b5d96; --pass-soft: #e2ecf6; --warn: #954a00; --warn-soft: #f9e9d6; --fail: #a3221b; --fail-soft: #f8e1de;
+  --focus: #1b5d96;
+  --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121518; --surface: #1a1e22; --surface-sunken: #0e1113; --line: #30363c; --line-strong: #767c83;
+    --ink: #ebe8e0; --ink-muted: #a4a8ad; --brand: #6cc0bc; --brand-soft: #12302f;
+    --eye-perceive: #6cc0bc; --eye-perceive-soft: #12302f; --eye-measure: #e2b350; --eye-measure-soft: #2d2410; --eye-discern: #ec8f9a; --eye-discern-soft: #351a1f;
+    --pass: #82b8e8; --pass-soft: #142738; --warn: #f0a35a; --warn-soft: #33220f; --fail: #f28b7f; --fail-soft: #3a1916; --focus: #82b8e8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121518; --surface: #1a1e22; --surface-sunken: #0e1113; --line: #30363c; --line-strong: #767c83;
+  --ink: #ebe8e0; --ink-muted: #a4a8ad; --brand: #6cc0bc; --brand-soft: #12302f;
+  --eye-perceive: #6cc0bc; --eye-perceive-soft: #12302f; --eye-measure: #e2b350; --eye-measure-soft: #2d2410; --eye-discern: #ec8f9a; --eye-discern-soft: #351a1f;
+  --pass: #82b8e8; --pass-soft: #142738; --warn: #f0a35a; --warn-soft: #33220f; --fail: #f28b7f; --fail-soft: #3a1916; --focus: #82b8e8;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-sans); font-size: 15px; line-height: 22px; }
+h1, h2, h3, p, ul, ol, figure, dl { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+.page { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 64px; display: grid; gap: 32px; }
+.eyebrow { font-size: 11px; line-height: 16px; font-weight: 600; letter-spacing: 0.08em; color: var(--ink-muted); }
+.masthead { border-top: 2px solid var(--ink); padding-top: 24px; display: grid; gap: 12px; }
+.masthead h1 { font-family: var(--font-serif); font-size: 40px; line-height: 44px; font-weight: 600; letter-spacing: -0.01em; }
+.masthead p { max-width: 74ch; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px 24px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; }
+.toc a { color: var(--brand); text-decoration: none; font-weight: 500; }
+.toc a:hover { text-decoration: underline; }
+.toc a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 24px; display: grid; gap: 20px; min-width: 0; scroll-margin-top: 16px; }
+.panel-head { display: grid; gap: 4px; }
+.panel h2 { font-family: var(--font-serif); font-size: 28px; line-height: 34px; font-weight: 600; }
+.panel h3 { font-size: 15px; line-height: 20px; font-weight: 600; }
+.lede { color: var(--ink-muted); max-width: 74ch; }
+.figwrap { overflow-x: auto; min-width: 0; border-radius: 4px; }
+figure { display: grid; gap: 12px; min-width: 0; }
+figcaption { font-size: 13px; line-height: 18px; color: var(--ink-muted); max-width: 90ch; }
+@media (max-width: 600px) { .panel { padding: 16px; } .masthead h1 { font-size: 32px; line-height: 36px; } }
+
+/* diagrams */
+.dg { display: block; width: 100%; height: auto; }
+.dg-mind { min-width: 780px; } .dg-arch { min-width: 820px; } .dg-life { min-width: 820px; } .dg-proto { min-width: 780px; }
+.dg text { font-family: var(--font-sans); font-size: 12px; fill: var(--ink); }
+.dg .t-strong { font-weight: 600; }
+.dg .t-sub { font-size: 11px; fill: var(--ink-muted); }
+.dg .t-mono { font-family: var(--font-mono); font-size: 11px; fill: var(--ink-muted); }
+.dg .t-zone { font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; fill: var(--ink-muted); }
+.dg .node { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1; }
+.dg .node-sunk { fill: var(--surface-sunken); stroke: var(--line); stroke-width: 1; }
+.dg .zone { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 5 4; }
+.dg .edge { fill: none; stroke: var(--ink-muted); stroke-width: 1.25; }
+.dg .edge-loop { fill: none; stroke: var(--ink-muted); stroke-width: 1.25; stroke-dasharray: 4 3; }
+.dg .ah { fill: var(--ink-muted); }
+.dg .dot { fill: var(--ink-muted); }
+.dg .lbl { font-size: 11px; fill: var(--ink-muted); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.dg .center rect { fill: var(--ink); }
+.dg .center text { fill: var(--paper); }
+.dg .e1 rect { fill: var(--eye-perceive-soft); stroke: var(--eye-perceive); stroke-width: 1.25; } .dg .e1 text { fill: var(--eye-perceive); } .dg .e1-edge { fill: none; stroke: var(--eye-perceive); stroke-width: 1.5; }
+.dg .e2 rect { fill: var(--eye-measure-soft); stroke: var(--eye-measure); stroke-width: 1.25; } .dg .e2 text { fill: var(--eye-measure); } .dg .e2-edge { fill: none; stroke: var(--eye-measure); stroke-width: 1.5; }
+.dg .e3 rect { fill: var(--eye-discern-soft); stroke: var(--eye-discern); stroke-width: 1.25; } .dg .e3 text { fill: var(--eye-discern); } .dg .e3-edge { fill: none; stroke: var(--eye-discern); stroke-width: 1.5; }
+.dg .neutral-edge { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.dg .st-fail rect { fill: var(--fail-soft); stroke: var(--fail); stroke-width: 1.25; } .dg .st-fail text { fill: var(--fail); }
+.dg .st-pass rect { fill: var(--pass-soft); stroke: var(--pass); stroke-width: 1.25; } .dg .st-pass text { fill: var(--pass); }
+.dg .st-warn rect { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 1.25; } .dg .st-warn text { fill: var(--warn); }
+.dg .st-ledger rect { fill: var(--ink); } .dg .st-ledger text { fill: var(--paper); }
+
+/* decisions + table */
+.decisions { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.decisions li { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; line-height: 18px; }
+.decisions strong { font-size: 14px; line-height: 20px; }
+.decisions span { color: var(--ink-muted); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 18px; }
+th { background: var(--surface-sunken); color: var(--ink-muted); font-weight: 600; font-size: 12px; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+td code { font-family: var(--font-mono); font-size: 12px; background: var(--surface-sunken); padding: 1px 4px; border-radius: 2px; }
+td:first-child { font-weight: 500; white-space: nowrap; }
+.note { font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+</style>
+
+<main class="page">
+  <header class="masthead">
+    <p class="eyebrow">TRINETRA-RISK v2 · ARCHITECTURE</p>
+    <h1>How the engine is built</h1>
+    <p>Mind map, target architecture, event lifecycle and prototype map for the bounded operational-risk rule engine. The engine proposes, a named human decides, and every decision lands in an append-only ledger. Source systems, routes and stores shown for production are a proposed design, not a description of any bank's estate.</p>
+    <nav class="toc" aria-label="Sections">
+      <a href="#mindmap">Mind map</a><a href="#architecture">Target architecture</a><a href="#lifecycle">Event lifecycle</a><a href="#prototype">Prototype to production</a>
+    </nav>
+  </header>
+
+  <!-- 1. MIND MAP -->
+  <section class="panel" id="mindmap" aria-labelledby="mm-title">
+    <div class="panel-head"><p class="eyebrow">VIEW 1</p><h2 id="mm-title">Mind map</h2><p class="lede">Everything the system is responsible for, on one page. The engine's three eyes sit on the right; what feeds it, what it emits and the rules that bound it sit on the left.</p></div>
+    <figure>
+      <div class="figwrap">
+        <svg class="dg dg-mind" viewBox="0 0 1040 660" role="img" aria-label="Mind map: TRINETRA-RISK v2 at the centre, with three engine branches (Pratyaksha, Ganita, Viveka) on the right and Inputs, Governance and Outputs on the left, each with four leaves.">
+          <!-- trunk edges -->
+          <path class="neutral-edge" d="M430,330 C395,330 395,100 360,100"/>
+          <path class="neutral-edge" d="M430,330 L360,330"/>
+          <path class="neutral-edge" d="M430,330 C395,330 395,560 360,560"/>
+          <path class="e1-edge" d="M610,330 C645,330 645,100 680,100"/>
+          <path class="e2-edge" d="M610,330 L680,330"/>
+          <path class="e3-edge" d="M610,330 C645,330 645,560 680,560"/>
+
+          <!-- centre -->
+          <g class="center"><rect x="430" y="296" width="180" height="68" rx="6"/>
+            <text x="520" y="326" text-anchor="middle" style="font-family:var(--font-serif);font-size:18px;font-weight:600">TRINETRA-RISK v2</text>
+            <text x="520" y="346" text-anchor="middle" style="font-size:11px">bounded rule engine</text></g>
+
+          <!-- right: eyes -->
+          <g class="e1"><rect x="680" y="80" width="150" height="40" rx="4"/><text x="755" y="104" text-anchor="middle" class="t-strong">Eye I · Pratyaksha</text></g>
+          <g class="e2"><rect x="680" y="310" width="150" height="40" rx="4"/><text x="755" y="334" text-anchor="middle" class="t-strong">Eye II · Ganita</text></g>
+          <g class="e3"><rect x="680" y="540" width="150" height="40" rx="4"/><text x="755" y="564" text-anchor="middle" class="t-strong">Eye III · Viveka</text></g>
+
+          <!-- right leaves: Eye I (c=100) -->
+          <path class="edge" d="M830,100 C838,100 838,67 846,67"/><path class="edge" d="M830,100 C838,100 838,89 846,89"/><path class="edge" d="M830,100 C838,100 838,111 846,111"/><path class="edge" d="M830,100 C838,100 838,133 846,133"/>
+          <text x="854" y="71">Schema check, data gaps</text><text x="854" y="93">Narrative injection screen</text><text x="854" y="115">OR-YES / NO / HYBRID</text><text x="854" y="137">Basel L1 + channel tags</text>
+          <!-- Eye II (c=330) -->
+          <path class="edge" d="M830,330 C838,330 838,297 846,297"/><path class="edge" d="M830,330 C838,330 838,319 846,319"/><path class="edge" d="M830,330 C838,330 838,341 846,341"/><path class="edge" d="M830,330 C838,330 838,363 846,363"/>
+          <text x="854" y="301">Gross loss, Cases A/B/C</text><text x="854" y="323">Net of realised recoveries</text><text x="854" y="345">Table 8 BI map, loss year</text><text x="854" y="367">LC and ILM delta</text>
+          <!-- Eye III (c=560) -->
+          <path class="edge" d="M830,560 C838,560 838,527 846,527"/><path class="edge" d="M830,560 C838,560 838,549 846,549"/><path class="edge" d="M830,560 C838,560 838,571 846,571"/><path class="edge" d="M830,560 C838,560 838,593 846,593"/>
+          <text x="854" y="531">Weighted DQ score</text><text x="854" y="553">Materiality and repeats</text><text x="854" y="575">Escalation routing</text><text x="854" y="597">Approve or override</text>
+
+          <!-- left: context -->
+          <g><rect class="node" x="210" y="80" width="150" height="40" rx="4"/><text x="285" y="104" text-anchor="middle" class="t-strong">Inputs</text></g>
+          <g><rect class="node" x="210" y="310" width="150" height="40" rx="4"/><text x="285" y="334" text-anchor="middle" class="t-strong">Governance</text></g>
+          <g><rect class="node" x="210" y="540" width="150" height="40" rx="4"/><text x="285" y="564" text-anchor="middle" class="t-strong">Outputs</text></g>
+          <!-- Inputs (c=100) -->
+          <path class="edge" d="M210,100 C202,100 202,67 194,67"/><path class="edge" d="M210,100 C202,100 202,89 194,89"/><path class="edge" d="M210,100 C202,100 202,111 194,111"/><path class="edge" d="M210,100 C202,100 202,133 194,133"/>
+          <text x="186" y="71" text-anchor="end">Event record, 7 groups</text><text x="186" y="93" text-anchor="end">Evidence checklist</text><text x="186" y="115" text-anchor="end">Bank parameters</text><text x="186" y="137" text-anchor="end">Ruleset 2.0.0-proto</text>
+          <!-- Governance (c=330) -->
+          <path class="edge" d="M210,330 C202,330 202,297 194,297"/><path class="edge" d="M210,330 C202,330 202,319 194,319"/><path class="edge" d="M210,330 C202,330 202,341 194,341"/><path class="edge" d="M210,330 C202,330 202,363 194,363"/>
+          <text x="186" y="301" text-anchor="end">Advisory only, no writes</text><text x="186" y="323" text-anchor="end">Every rule cited</text><text x="186" y="345" text-anchor="end">Human gate on output</text><text x="186" y="367" text-anchor="end">Append-only versions</text>
+          <!-- Outputs (c=560) -->
+          <path class="edge" d="M210,560 C202,560 202,527 194,527"/><path class="edge" d="M210,560 C202,560 202,549 194,549"/><path class="edge" d="M210,560 C202,560 202,571 194,571"/><path class="edge" d="M210,560 C202,560 202,593 194,593"/>
+          <text x="186" y="531" text-anchor="end">Verdict and rule trace</text><text x="186" y="553" text-anchor="end">Rule 16 output</text><text x="186" y="575" text-anchor="end">Control recommendations</text><text x="186" y="597" text-anchor="end">Ledger row + input hash</text>
+        </svg>
+      </div>
+      <figcaption>The three eyes run in order: perceive (classify the event), measure (quantify the loss and its capital effect), discern (score, route and hand to a human). Governance applies to every branch: nothing leaves the engine without a citation and a human decision.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 2. TARGET ARCHITECTURE -->
+  <section class="panel" id="architecture" aria-labelledby="ar-title">
+    <div class="panel-head"><p class="eyebrow">VIEW 2</p><h2 id="ar-title">Target architecture</h2><p class="lede">The production shape the prototype grows into. The dashed line is the trust boundary: data crosses it inward as read-only feeds, and the only thing Trinetra writes is its own ledger.</p></div>
+    <figure>
+      <div class="figwrap">
+        <svg class="dg dg-arch" viewBox="0 0 1040 500" role="img" aria-label="Target architecture: four source systems feed a read-only intake API; narratives go to a quarantine that passes only a flag; a deterministic rule engine with three eyes loads a pinned ruleset and board-approved parameters; its proposal goes to a human gate; decisions are written to an append-only ledger that feeds the loss dataset and capital reporting.">
+          <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+
+          <text x="20" y="42" class="t-zone">SOURCES</text>
+          <rect class="zone" x="200" y="20" width="660" height="460" rx="8"/>
+          <text x="216" y="42" class="t-zone">TRINETRA BOUNDARY · READ-ONLY TO SOURCES</text>
+          <text x="890" y="42" class="t-zone">RECORDS</text>
+
+          <!-- sources -->
+          <rect class="node" x="20" y="70" width="150" height="52" rx="4"/><text x="95" y="93" text-anchor="middle" class="t-strong">Branch intake UI</text><text x="95" y="109" text-anchor="middle" class="t-sub">event capture</text>
+          <rect class="node" x="20" y="150" width="150" height="52" rx="4"/><text x="95" y="173" text-anchor="middle" class="t-strong">Core banking / GL</text><text x="95" y="189" text-anchor="middle" class="t-sub">accounting dates</text>
+          <rect class="node" x="20" y="230" width="150" height="52" rx="4"/><text x="95" y="253" text-anchor="middle" class="t-strong">Loan origination</text><text x="95" y="269" text-anchor="middle" class="t-sub">credit links</text>
+          <rect class="node" x="20" y="310" width="150" height="52" rx="4"/><text x="95" y="333" text-anchor="middle" class="t-strong">Fraud and incidents</text><text x="95" y="349" text-anchor="middle" class="t-sub">case feeds</text>
+
+          <path class="edge" d="M170,96 C195,96 195,176 218,180" marker-end="url(#ah2)"/>
+          <path class="edge" d="M170,176 L218,184" marker-end="url(#ah2)"/>
+          <path class="edge" d="M170,256 C195,256 195,192 218,190" marker-end="url(#ah2)"/>
+          <path class="edge" d="M170,336 C195,336 195,198 218,196" marker-end="url(#ah2)"/>
+          <text x="186" y="140" text-anchor="middle" class="lbl">reads</text>
+
+          <!-- intake + quarantine -->
+          <rect class="node" x="220" y="152" width="130" height="72" rx="4"/><text x="285" y="182" text-anchor="middle" class="t-strong">Intake API</text><text x="285" y="198" text-anchor="middle" class="t-sub">schema + date checks</text>
+          <rect class="node" x="220" y="290" width="130" height="72" rx="4"/><text x="285" y="320" text-anchor="middle" class="t-strong">Narrative quarantine</text><text x="285" y="336" text-anchor="middle" class="t-sub">screened, never parsed</text>
+          <path class="edge" d="M285,224 L285,288" marker-end="url(#ah2)"/><text x="292" y="260" class="lbl">narrative</text>
+          <path class="edge" d="M350,188 L424,188" marker-end="url(#ah2)"/><text x="387" y="181" text-anchor="middle" class="lbl">record</text>
+          <path class="edge" d="M350,326 L396,326 L396,208 L424,208" marker-end="url(#ah2)"/><text x="373" y="319" text-anchor="middle" class="lbl">flag</text>
+
+          <!-- registry + params -->
+          <rect class="node-sunk" x="410" y="56" width="120" height="52" rx="4"/><text x="470" y="79" text-anchor="middle" class="t-strong">Ruleset registry</text><text x="470" y="95" text-anchor="middle" class="t-sub">versioned, signed</text>
+          <rect class="node-sunk" x="545" y="56" width="125" height="52" rx="4"/><text x="607" y="79" text-anchor="middle" class="t-strong">Parameter store</text><text x="607" y="95" text-anchor="middle" class="t-sub">board-approved</text>
+          <path class="edge" d="M470,108 L470,138" marker-end="url(#ah2)"/><text x="476" y="127" class="lbl">pins</text>
+          <path class="edge" d="M607,108 L607,138" marker-end="url(#ah2)"/><text x="613" y="127" class="lbl">loads</text>
+
+          <!-- engine -->
+          <rect class="node" x="410" y="140" width="260" height="230" rx="6"/>
+          <text x="424" y="160" class="t-zone">RULE ENGINE · DETERMINISTIC</text>
+          <g class="e1"><rect x="426" y="172" width="228" height="46" rx="4"/><text x="440" y="192" class="t-strong">Eye I · Pratyaksha</text><text x="440" y="208" class="t-sub" style="fill:var(--eye-perceive)">classify · R01–R05</text></g>
+          <g class="e2"><rect x="426" y="240" width="228" height="46" rx="4"/><text x="440" y="260" class="t-strong">Eye II · Ganita</text><text x="440" y="276" class="t-sub" style="fill:var(--eye-measure)">quantify · R06–R11</text></g>
+          <g class="e3"><rect x="426" y="308" width="228" height="46" rx="4"/><text x="440" y="328" class="t-strong">Eye III · Viveka</text><text x="440" y="344" class="t-sub" style="fill:var(--eye-discern)">route · R12–R16</text></g>
+          <path class="edge" d="M540,218 L540,238" marker-end="url(#ah2)"/>
+          <path class="edge" d="M540,286 L540,306" marker-end="url(#ah2)"/>
+
+          <!-- gate + approvers -->
+          <path class="edge" d="M654,331 L690,331 L690,206 L718,206" marker-end="url(#ah2)"/><text x="694" y="268" class="lbl" text-anchor="middle">proposal</text>
+          <rect class="node" x="720" y="170" width="120" height="72" rx="4"/><text x="780" y="200" text-anchor="middle" class="t-strong">Human gate</text><text x="780" y="216" text-anchor="middle" class="t-sub">SSO + role check</text>
+          <rect class="node-sunk" x="720" y="310" width="120" height="52" rx="4"/><text x="780" y="333" text-anchor="middle" class="t-strong">ORM approvers</text><text x="780" y="349" text-anchor="middle" class="t-sub">named by route</text>
+          <path class="edge" d="M780,308 L780,244" marker-end="url(#ah2)"/><text x="786" y="280" class="lbl">decide</text>
+
+          <!-- records -->
+          <rect class="node" x="890" y="70" width="140" height="52" rx="4"/><text x="960" y="93" text-anchor="middle" class="t-strong">Audit ledger</text><text x="960" y="109" text-anchor="middle" class="t-sub">append-only, chained</text>
+          <rect class="node" x="890" y="190" width="140" height="52" rx="4"/><text x="960" y="213" text-anchor="middle" class="t-strong">OR loss dataset</text><text x="960" y="229" text-anchor="middle" class="t-sub">final classifications</text>
+          <rect class="node" x="890" y="310" width="140" height="52" rx="4"/><text x="960" y="333" text-anchor="middle" class="t-strong">Capital reporting</text><text x="960" y="349" text-anchor="middle" class="t-sub">LC, ILM, returns</text>
+          <path class="edge" d="M840,192 C866,192 866,96 888,96" marker-end="url(#ah2)"/><text x="865" y="150" text-anchor="middle" class="lbl">writes vN</text>
+          <path class="edge" d="M960,122 L960,188" marker-end="url(#ah2)"/><text x="966" y="160" class="lbl">publishes</text>
+          <path class="edge" d="M960,242 L960,308" marker-end="url(#ah2)"/><text x="966" y="280" class="lbl">feeds</text>
+
+          <!-- the missing edge -->
+          <text x="95" y="420" text-anchor="middle" class="t-sub">No write path back</text>
+          <text x="95" y="436" text-anchor="middle" class="t-sub">to any source system</text>
+        </svg>
+      </div>
+      <figcaption>Two arrows carry the design. The narrative reaches the engine only as a one-bit flag from the quarantine, so text in a description can never steer a classification. And there is no arrow from the boundary back to the sources: the engine can read core banking but never post to it.</figcaption>
+    </figure>
+
+    <h3>Decisions this architecture locks in</h3>
+    <ul class="decisions">
+      <li><strong>The engine is a pure function</strong><span>Same input, ruleset version and parameter set always give the same output. Each ledger row stores all three identifiers, so any past verdict can be replayed and checked.</span></li>
+      <li><strong>Narrative is data, never instructions</strong><span>Free text is held in quarantine and screened. Only the screen result crosses into the engine; classification uses structured fields.</span></li>
+      <li><strong>Advisory, no write authority</strong><span>Trinetra writes only to its own ledger. Posting to the GL or the loss dataset happens downstream, from approved rows.</span></li>
+      <li><strong>Parameters are data, not code</strong><span>Thresholds, bands and the escalation matrix live in a parameter store with maker-checker approval. A board change needs no release.</span></li>
+      <li><strong>Rulesets are pinned and signed</strong><span>A new ruleset is a new version in the registry. The engine refuses an unsigned or unknown version.</span></li>
+      <li><strong>Append-only, hash-chained</strong><span>Each row carries the hash of the previous one. A correction is a new version that names the row it supersedes.</span></li>
+    </ul>
+  </section>
+
+  <!-- 3. LIFECYCLE -->
+  <section class="panel" id="lifecycle" aria-labelledby="lc-title">
+    <div class="panel-head"><p class="eyebrow">VIEW 3</p><h2 id="lc-title">Event lifecycle</h2><p class="lede">The states one loss event moves through, with the rules that move it. Two loops exist: a block sends the event back for fixes before any decision, and a correction after a decision starts a new version.</p></div>
+    <figure>
+      <div class="figwrap">
+        <svg class="dg dg-life" viewBox="0 0 1040 262" role="img" aria-label="Lifecycle: Captured, Screened, Classified, Quantified, Discerned, Awaiting approver, then Approved or Overridden, then Ledgered. A failed schema or date check moves Screened to Blocked, which returns to Captured. A correction moves a ledgered event back to Captured as a new version.">
+          <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+          <!-- rule labels above -->
+          <text x="70" y="70" text-anchor="middle" class="t-mono">intake form</text>
+          <text x="200" y="70" text-anchor="middle" class="t-mono">R01–R03</text>
+          <text x="330" y="70" text-anchor="middle" class="t-mono">R04–R05</text>
+          <text x="460" y="70" text-anchor="middle" class="t-mono">R06–R11</text>
+          <text x="590" y="70" text-anchor="middle" class="t-mono">R12–R15</text>
+          <text x="720" y="70" text-anchor="middle" class="t-mono">R16</text>
+          <!-- main row -->
+          <rect class="node" x="16" y="80" width="108" height="44" rx="4"/><text x="70" y="106" text-anchor="middle" class="t-strong">Captured</text>
+          <g class="e1"><rect x="146" y="80" width="108" height="44" rx="4"/><text x="200" y="106" text-anchor="middle" class="t-strong">Screened</text></g>
+          <g class="e1"><rect x="276" y="80" width="108" height="44" rx="4"/><text x="330" y="106" text-anchor="middle" class="t-strong">Classified</text></g>
+          <g class="e2"><rect x="406" y="80" width="108" height="44" rx="4"/><text x="460" y="106" text-anchor="middle" class="t-strong">Quantified</text></g>
+          <g class="e3"><rect x="536" y="80" width="108" height="44" rx="4"/><text x="590" y="106" text-anchor="middle" class="t-strong">Discerned</text></g>
+          <g class="e3"><rect x="666" y="80" width="108" height="44" rx="4"/><text x="720" y="100" text-anchor="middle" class="t-strong">Awaiting</text><text x="720" y="115" text-anchor="middle" class="t-strong">approver</text></g>
+          <path class="edge" d="M124,102 L144,102" marker-end="url(#ah3)"/>
+          <path class="edge" d="M254,102 L274,102" marker-end="url(#ah3)"/>
+          <path class="edge" d="M384,102 L404,102" marker-end="url(#ah3)"/>
+          <path class="edge" d="M514,102 L534,102" marker-end="url(#ah3)"/>
+          <path class="edge" d="M644,102 L664,102" marker-end="url(#ah3)"/>
+          <!-- forks -->
+          <g class="st-pass"><rect x="796" y="26" width="108" height="40" rx="4"/><text x="850" y="50" text-anchor="middle" class="t-strong">Approved</text></g>
+          <g class="st-warn"><rect x="796" y="138" width="108" height="40" rx="4"/><text x="850" y="162" text-anchor="middle" class="t-strong">Overridden</text></g>
+          <path class="edge" d="M774,96 C786,96 784,46 794,46" marker-end="url(#ah3)"/>
+          <path class="edge" d="M774,108 C786,108 784,158 794,158" marker-end="url(#ah3)"/>
+          <g class="st-ledger"><rect x="926" y="80" width="100" height="44" rx="4"/><text x="976" y="100" text-anchor="middle" class="t-strong">Ledgered vN</text><text x="976" y="115" text-anchor="middle" style="font-size:11px">append-only</text></g>
+          <path class="edge" d="M904,46 C916,46 914,96 924,96" marker-end="url(#ah3)"/>
+          <path class="edge" d="M904,158 C916,158 914,108 924,108" marker-end="url(#ah3)"/>
+          <!-- blocked loop -->
+          <g class="st-fail"><rect x="146" y="180" width="108" height="40" rx="4"/><text x="200" y="204" text-anchor="middle" class="t-strong">Blocked</text></g>
+          <path class="edge" d="M200,124 L200,178" marker-end="url(#ah3)"/><text x="206" y="155" class="lbl">R01 / R02 fail</text>
+          <path class="edge-loop" d="M146,200 L86,200 L86,126" marker-end="url(#ah3)"/><text x="116" y="192" text-anchor="middle" class="lbl">fix inputs</text>
+          <!-- correction loop -->
+          <path class="edge-loop" d="M976,124 L976,246 L40,246 L40,126" marker-end="url(#ah3)"/>
+          <text x="560" y="240" text-anchor="middle" class="lbl">correction: new version v(N+1), previous row kept</text>
+        </svg>
+      </div>
+      <figcaption>An event cannot reach the approver while R01 (mandatory fields) or R02 (date sequence) fails. An override needs a different Basel L1 category and a written reason. Nothing in the ledger is ever edited: a correction re-enters at Captured and produces the next version.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 4. PROTOTYPE -->
+  <section class="panel" id="prototype" aria-labelledby="pr-title">
+    <div class="panel-head"><p class="eyebrow">VIEW 4</p><h2 id="pr-title">Prototype to production</h2><p class="lede">The prototype runs the whole loop inside one browser page. The module boundaries below are the seams where each part is lifted out into a production service.</p></div>
+    <figure>
+      <div class="figwrap">
+        <svg class="dg dg-proto" viewBox="0 0 1040 220" role="img" aria-label="Prototype data flow: the form schema builds the intake form; input events trigger read, which passes values to engine; the result renders the verdict and gate; read also feeds a SHA-256 hash used by the gate; record writes a row to the ledger in browser storage.">
+          <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+          <rect class="node-sunk" x="16" y="50" width="140" height="56" rx="4"/><text x="86" y="74" text-anchor="middle" class="t-mono" style="fill:var(--ink)">SECTIONS</text><text x="86" y="92" text-anchor="middle" class="t-sub">form schema</text>
+          <rect class="node" x="196" y="50" width="140" height="56" rx="4"/><text x="266" y="74" text-anchor="middle" class="t-strong">Intake form</text><text x="266" y="92" text-anchor="middle" class="t-sub">rendered DOM</text>
+          <rect class="node" x="376" y="50" width="140" height="56" rx="4"/><text x="446" y="74" text-anchor="middle" class="t-mono" style="fill:var(--ink)">read()</text><text x="446" y="92" text-anchor="middle" class="t-sub">plain values</text>
+          <g class="e2"><rect x="556" y="50" width="140" height="56" rx="4"/><text x="626" y="74" text-anchor="middle" class="t-mono">engine(v)</text><text x="626" y="92" text-anchor="middle" class="t-sub" style="fill:var(--eye-measure)">16 rules, pure</text></g>
+          <rect class="node" x="736" y="50" width="140" height="56" rx="4"/><text x="806" y="74" text-anchor="middle" class="t-strong">Verdict + gate</text><text x="806" y="92" text-anchor="middle" class="t-sub">renderers</text>
+          <g class="st-ledger"><rect x="916" y="50" width="110" height="56" rx="4"/><text x="971" y="74" text-anchor="middle" class="t-strong">Ledger</text><text x="971" y="92" text-anchor="middle" style="font-size:11px">browser storage</text></g>
+          <path class="edge" d="M156,78 L194,78" marker-end="url(#ah4)"/><text x="175" y="70" text-anchor="middle" class="lbl">builds</text>
+          <path class="edge" d="M336,78 L374,78" marker-end="url(#ah4)"/><text x="355" y="70" text-anchor="middle" class="lbl">input</text>
+          <path class="edge" d="M516,78 L554,78" marker-end="url(#ah4)"/><text x="535" y="70" text-anchor="middle" class="lbl">values</text>
+          <path class="edge" d="M696,78 L734,78" marker-end="url(#ah4)"/><text x="715" y="70" text-anchor="middle" class="lbl">result</text>
+          <path class="edge" d="M876,78 L914,78" marker-end="url(#ah4)"/><text x="895" y="70" text-anchor="middle" class="lbl">record</text>
+          <rect class="node" x="556" y="150" width="140" height="48" rx="4"/><text x="626" y="170" text-anchor="middle" class="t-mono" style="fill:var(--ink)">sha256()</text><text x="626" y="186" text-anchor="middle" class="t-sub">canonical input</text>
+          <path class="edge" d="M446,106 L446,174 L554,174" marker-end="url(#ah4)"/><text x="452" y="146" class="lbl">values</text>
+          <path class="edge" d="M696,174 L806,174 L806,108" marker-end="url(#ah4)"/><text x="751" y="167" text-anchor="middle" class="lbl">input hash</text>
+        </svg>
+      </div>
+      <figcaption>The engine already takes plain values and returns a plain result with no access to the page, so it can move to a server unchanged. The hash ties each decision to the exact input it was made on; the gate refuses to record the same input twice.</figcaption>
+    </figure>
+
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Part</th><th scope="col">In the prototype</th><th scope="col">In production</th></tr></thead>
+        <tbody>
+          <tr><td>Intake</td><td>Form built from the <code>SECTIONS</code> schema; samples loaded by hand</td><td>Intake API with the same schema as JSON Schema; feeds from core banking, loan origination and fraud systems</td></tr>
+          <tr><td>Narrative screen</td><td>Regular expression over the description</td><td>Quarantine service with a maintained screen; passes a flag only and keeps the text for audit</td></tr>
+          <tr><td>Rule engine</td><td><code>engine(v)</code> running in the page</td><td>Stateless engine service running the same function; ruleset version pinned from a signed registry</td></tr>
+          <tr><td>Bank parameters</td><td>Editable fields with illustrative defaults</td><td>Parameter store with maker-checker; each set versioned and referenced from the ledger row</td></tr>
+          <tr><td>Reference data</td><td>Basel L1 list and business-line map in code</td><td>Reference data service, versioned with the ruleset</td></tr>
+          <tr><td>Human gate</td><td>Approver chosen from a list</td><td>Approver identity from SSO; role checked against the escalation route</td></tr>
+          <tr><td>Input hash</td><td>SHA-256 in the browser</td><td>Server-side canonical hash, plus the previous row's hash to form a chain</td></tr>
+          <tr><td>Audit ledger</td><td>Browser storage, this viewer only</td><td>Write-once store; rows never updated or deleted; corrections link to the row they supersede</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The production column is a proposed design. Each source system and store should be confirmed against the bank's own estate and security architecture before build.</p>
+  </section>
+</main>
